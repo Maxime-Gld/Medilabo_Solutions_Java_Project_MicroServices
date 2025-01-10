@@ -18,14 +18,21 @@ public class PatientServiceImpl implements PatientService {
         this.patientRepository = patientRepository;
     }
 
+    //Create
     @Override
     public void addPatient(PatientEntity patient) {
         patientRepository.save(patient);
     }
 
+    //Read
     @Override
     public Optional<PatientEntity> getPatientById(Integer id) {
         return patientRepository.findById(id);
+    }
+
+    @Override
+    public Optional<PatientEntity> getPatientByNameAndLastname(String name, String lastname) {
+        return patientRepository.findByNameAndLastname(name, lastname);
     }
 
     @Override
