@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.medilabo.solutions.patient.dto.ApiResponseDTO;
+import com.medilabo.solutions.patient.dto.PatientDTO;
 import com.medilabo.solutions.patient.entities.PatientEntity;
 import com.medilabo.solutions.patient.services.PatientService;
 
@@ -32,17 +34,22 @@ public class PatientController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Object> addPatient(@Valid PatientEntity patient, BindingResult result) {
+    public ResponseEntity<ApiResponseDTO<PatientDTO>> addPatient(@Valid PatientEntity patient, BindingResult result) {
         if (result.hasErrors()) {
             // Si des erreurs existent, retourne les erreurs de validation en réponse
-            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+            List<String> errors = result.getAllErrors().stream().map(err -> err.getDefaultMessage()).toList();
+            return new ResponseEntity<>(new ApiResponseDTO<>(errors), HttpStatus.BAD_REQUEST);
         }
 
         // Ajout du patient
         patientService.addPatient(patient);
 
+        // Convertir PatientEntity en PatientDTO
+        PatientDTO patientDTO = new PatientDTO(patient.getId(), patient.getName(), patient.getLastname(),
+                patient.getBirthdate(), patient.getGender(), patient.getAdress(), patient.getPhone());
+
         // Retourne une réponse avec les données du patient ajouté
-        return new ResponseEntity<>(patient, HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponseDTO<>(patientDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/all")
@@ -62,11 +69,12 @@ public class PatientController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Object> updatePatient(@PathVariable Integer id, @Valid PatientEntity patient,
-            BindingResult result) {
+    public ResponseEntity<ApiResponseDTO<PatientDTO>> updatePatient(@PathVariable Integer id, @Valid PatientEntity patient,
+            BindingResult result) { 
         if (result.hasErrors()) {
             // Si des erreurs existent, retourne les erreurs de validation en réponse
-            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+            List<String> errors = result.getAllErrors().stream().map(err -> err.getDefaultMessage()).toList();
+            return new ResponseEntity<>(new ApiResponseDTO<>(errors), HttpStatus.BAD_REQUEST);
         }
         Optional<PatientEntity> patientOptional = patientService.getPatientById(id);
         if (patientOptional.isPresent()) {
@@ -78,7 +86,13 @@ public class PatientController {
             existingPatient.setAdress(patient.getAdress());
             existingPatient.setPhone(patient.getPhone());
             patientService.updatePatient(existingPatient);
-            return new ResponseEntity<>(existingPatient, HttpStatus.OK);
+
+            // Convertir PatientEntity en PatientDTO
+            PatientDTO patientDTO = new PatientDTO(existingPatient.getId(), existingPatient.getName(),
+                    existingPatient.getLastname(), existingPatient.getBirthdate(), existingPatient.getGender(),
+                    existingPatient.getAdress(), existingPatient.getPhone());
+
+            return new ResponseEntity<>(new ApiResponseDTO<>(patientDTO), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
