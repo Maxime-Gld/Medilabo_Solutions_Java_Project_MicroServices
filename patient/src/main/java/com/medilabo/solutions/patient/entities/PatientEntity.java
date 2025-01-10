@@ -35,9 +35,7 @@ public class PatientEntity {
     @NotNull(message = "gender is required")
     String gender;
 
-    @NotNull(message = "adress is required")
     String adress;
 
-    @NotNull(message = "phone is required")
     String phone;
 }
