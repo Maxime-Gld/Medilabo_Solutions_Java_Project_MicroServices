@@ -34,7 +34,7 @@ public class PatientController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponseDTO<PatientDTO>> addPatient(@Valid PatientEntity patient, BindingResult result) {
+    public ResponseEntity<ApiResponseDTO<PatientDTO>> addPatient(@Valid PatientDTO patientDTO, BindingResult result) {
         if (result.hasErrors()) {
             // Si des erreurs existent, retourne les erreurs de validation en réponse
             List<String> errors = result.getAllErrors().stream().map(err -> err.getDefaultMessage()).toList();
@@ -42,34 +42,28 @@ public class PatientController {
         }
 
         // Ajout du patient
-        patientService.addPatient(patient);
-
-        // Convertir PatientEntity en PatientDTO
-        PatientDTO patientDTO = new PatientDTO(patient.getId(), patient.getName(), patient.getLastname(),
-                patient.getBirthdate(), patient.getGender(), patient.getAdress(), patient.getPhone());
+        patientService.addPatientDTO(patientDTO);
 
         // Retourne une réponse avec les données du patient ajouté
         return new ResponseEntity<>(new ApiResponseDTO<>(patientDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PatientEntity>> getAllPatients() {
-        List<PatientEntity> patients = patientService.getAllPatients();
-        return new ResponseEntity<>(patients, HttpStatus.OK);
+    public ResponseEntity<List<PatientDTO>> getAllPatients() {
+        List<PatientDTO> patientDTOs = patientService.getAllPatientDTOs();
+
+        return new ResponseEntity<>(patientDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PatientEntity> getPatient(@PathVariable Integer id) {
-        Optional<PatientEntity> patient = patientService.getPatientById(id);
-        if (patient.isPresent()) {
-            return new ResponseEntity<>(patient.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<PatientDTO> getPatient(@PathVariable Integer id) {
+        return patientService.getPatientDTOById(id)
+            .map(patient -> new ResponseEntity<>(patient, HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponseDTO<PatientDTO>> updatePatient(@PathVariable Integer id, @Valid PatientEntity patient,
+    public ResponseEntity<ApiResponseDTO<PatientDTO>> updatePatient(@PathVariable Integer id, @Valid PatientDTO patient,
             BindingResult result) { 
         if (result.hasErrors()) {
             // Si des erreurs existent, retourne les erreurs de validation en réponse
@@ -99,7 +93,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Object> deletePatient(@PathVariable Integer id) {
+    public ResponseEntity<HttpStatus> deletePatient(@PathVariable Integer id) {
         Optional<PatientEntity> patient = patientService.getPatientById(id);
         if (patient.isPresent()) {
             patientService.deletePatient(id);
