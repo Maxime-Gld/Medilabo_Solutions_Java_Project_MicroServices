@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Front Thymeleaf</title>
+</head>
+<body>
+    <h1 th:text="${accueil}">Titre par défaut</h1>
+
+    <p th:text="${message}">Message par défaut</p>
+
+    <button th:if="${username != null}" th:onclick="location.href='/logout'">déconnexion</button>
+    <button th:if="${username == null}" th:onclick="location.href='/login'">connexion</button>
+
+    <a th:href="@{/patient/all}">voir tout les patients ici</a>
+</body>
+</html>
