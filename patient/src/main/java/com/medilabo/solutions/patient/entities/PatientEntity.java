@@ -29,7 +29,7 @@ public class PatientEntity {
     @NotNull(message = "name is required")
     String name;
 
-    @NotNull(message = "birthday is required")
+    @NotNull(message = "birthdate is required")
     LocalDate birthdate;
 
     @NotNull(message = "gender is required")
