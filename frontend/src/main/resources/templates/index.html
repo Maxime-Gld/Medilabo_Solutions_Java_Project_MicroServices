@@ -11,6 +11,6 @@
     <button th:if="${username != null}" th:onclick="location.href='/logout'">déconnexion</button>
     <button th:if="${username == null}" th:onclick="location.href='/login'">connexion</button>
 
-    <a th:href="@{/patient/all}">voir tout les patients ici</a>
+    <button th:onclick="location.href='/patient/all'">voir tout les patients ici</button>
 </body>
 </html>

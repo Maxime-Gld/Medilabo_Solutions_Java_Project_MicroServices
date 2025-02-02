@@ -28,15 +28,14 @@
                 <td th:text="${patient.adress}"></td>
                 <td th:text="${patient.phone}"></td>
                 <td>
-                    <a th:href="@{/patients/edit/{id}(id=${patient.id})}">Modifier</a>
-                    <a th:href="@{/patients/delete/{id}(id=${patient.id})}">Supprimer</a>
+                    <a th:href="@{/patient/update/{id}(id=${patient.id})}">Modifier ou supprimer</a>
                 </td>
             </tr>
         </tbody>
     </table>
 
-    <button th:onclick="location.href='/patient/add'">Ajouter un patient</button>
+    <button th:onclick="location.href='/add'">Ajouter un patient</button>
 
-    <a th:href="@{/}">Retour à la page d'accueil</a>
+    <button th:onclick="location.href='/'">Retour à la page d'accueil</button>
 </body>
 </html>

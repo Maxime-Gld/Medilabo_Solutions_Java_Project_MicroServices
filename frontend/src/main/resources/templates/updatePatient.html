@@ -4,7 +4,7 @@
     <title>Modifier un patient</title>
 </head>
 <body>
-    <h1>Modifier un patient</h1>
+    <h1>Modifier ou spprimer un patient</h1>
     <form th:action="@{/patient/update/{id}(id=${patient.id})}" method="post">
         <label for="name">Prénom:</label>
         <input type="text" id="name" name="name" th:value="${patient.name}" required><br>
@@ -20,5 +20,11 @@
         <input type="text" id="phone" name="phone" th:value="${patient.phone}" required><br>
         <input type="submit" value="Modifier">
     </form>
+    <form th:action="@{/patient/delete/{id}(id=${patient.id})}" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer ce patient ?');">
+        <input type="hidden" name="id" th:value="${patient.id}" />
+        <button type="submit" style="background-color: red; color: white;">Supprimer</button>
+    </form>
 </body>
+
+
 </html>
