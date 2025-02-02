@@ -1,5 +1,6 @@
 package com.medilabo.solutions.frontend.controllers;
 
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -8,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class HomeController {
+public class PageController {
     
     @GetMapping("/")
     public String index(Model model) {
@@ -29,5 +30,15 @@ public class HomeController {
         model.addAttribute("accueil", "Bienvenue sur Medilabo Solutions !");
 
         return "index";
+    }
+
+    @GetMapping("/list")
+    public String list(Model model) {
+        return "list";
+    }
+
+    @GetMapping("/add")
+    public String add(Model model) {
+        return "addPatient";
     }
 }
