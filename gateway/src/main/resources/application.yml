@@ -1,0 +1,11 @@
+server:
+  port: 8881
+spring:
+  name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: back-service
+          uri: http://localhost:8081/   # L'URL du microservice Back patient
+          predicates:
+            - Path=/patient/**            # Si l'URL de la requête commence par /api, alors acheminer la requête vers ce service
