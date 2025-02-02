@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +35,7 @@ public class PatientController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponseDTO<PatientDTO>> addPatient(@Valid PatientDTO patientDTO, BindingResult result) {
+    public ResponseEntity<ApiResponseDTO<PatientDTO>> addPatient(@Valid @RequestBody PatientDTO patientDTO, BindingResult result) {
         if (result.hasErrors()) {
             // Si des erreurs existent, retourne les erreurs de validation en réponse
             List<String> errors = result.getAllErrors().stream().map(err -> err.getDefaultMessage()).toList();
@@ -63,7 +64,7 @@ public class PatientController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponseDTO<PatientDTO>> updatePatient(@PathVariable Integer id, @Valid PatientDTO patient,
+    public ResponseEntity<ApiResponseDTO<PatientDTO>> updatePatient(@PathVariable Integer id, @Valid @RequestBody PatientDTO patient,
             BindingResult result) { 
         if (result.hasErrors()) {
             // Si des erreurs existent, retourne les erreurs de validation en réponse
