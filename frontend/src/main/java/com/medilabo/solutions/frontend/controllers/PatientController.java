@@ -26,12 +26,15 @@ public class PatientController {
 
     private Hmac hmacService = new Hmac();
     private String urlBackend = "http://localhost:8881/patient/";
+    private static final String SECRET_KEY = "medilabo";
 
     @GetMapping("/all")
     public String patients(Model model) throws IOException, InterruptedException {
         // générer un hmac pour communiquer avec l'API
         String randomString = hmacService.generateRandomString();
-        String hmac = hmacService.generateHmac(randomString, "medilabo");
+        String hmac = hmacService.generateHmac(randomString, SECRET_KEY);
+        System.out.println("randomString: " + randomString);
+        System.out.println("hmac: " + hmac);
 
         // Effectuer une requete HttpClient GET vers l'API pour obtenir la liste des
         // patients
@@ -39,7 +42,7 @@ public class PatientController {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(urlBackend + "all"))
                 .header("hmac", hmac)
-                .header("randomString", randomString)
+                .header("message", randomString)
                 .GET()
                 .build();
 
@@ -62,10 +65,15 @@ public class PatientController {
 
     @GetMapping("/update/{id}")
     public String updatePatient(Model model, @PathVariable Integer id) throws IOException, InterruptedException {
+        // générer un hmac pour communiquer avec l'API
+        String randomString = hmacService.generateRandomString();
+        String hmac = hmacService.generateHmac(randomString, SECRET_KEY);
         // Effectuer une requete httClient PUT vers l'API pour obtenir un patient
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(urlBackend + id))
+                .header("hmac", hmac)
+                .header("message", randomString)
                 .GET()
                 .build();
 
@@ -82,10 +90,15 @@ public class PatientController {
 
     @PostMapping("/delete/{id}")
     public String deletePatient(Model model, @PathVariable Integer id) throws IOException, InterruptedException {
+        // générer un hmac pour communiquer avec l'API
+        String randomString = hmacService.generateRandomString();
+        String hmac = hmacService.generateHmac(randomString, SECRET_KEY);
         // Effectuer une requete httpCient DELETE vers l'API pour supprimer un patient
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(urlBackend + "delete/" + id))
+                .header("hmac", hmac)
+                .header("message", randomString)
                 .DELETE()
                 .build();
 
@@ -98,6 +111,9 @@ public class PatientController {
 
     @PostMapping("/add")
     public String addPatient(Model model, PatientDTO patient) throws IOException, InterruptedException {
+        // générer un hmac pour communiquer avec l'API
+        String randomString = hmacService.generateRandomString();
+        String hmac = hmacService.generateHmac(randomString, SECRET_KEY);
         // Effectuer une requete POST vers l'API pour ajouter un patient
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -108,6 +124,8 @@ public class PatientController {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(urlBackend + "add"))
                 .header("Content-Type", "application/json")
+                .header("hmac", hmac)
+                .header("message", randomString)
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
@@ -118,6 +136,9 @@ public class PatientController {
 
     @PostMapping("/update/{id}")
     public String updatePatient(Model model, @PathVariable Integer id, PatientDTO patient) throws IOException, InterruptedException {
+        // générer un hmac pour communiquer avec l'API
+        String randomString = hmacService.generateRandomString();
+        String hmac = hmacService.generateHmac(randomString, SECRET_KEY);
         // Effectuer une requete httClient PUT vers l'API pour modifier un patient
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -126,6 +147,8 @@ public class PatientController {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(urlBackend + "update/" + id))
                 .header("Content-Type", "application/json")
+                .header("hmac", hmac)
+                .header("message", randomString)
                 .PUT(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
