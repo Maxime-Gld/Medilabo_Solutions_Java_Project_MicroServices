@@ -9,5 +9,6 @@ spring:
           uri: http://localhost:8081/   # L'URL du microservice Back patient
           filters:
             - HmacValidationFilter
+            - AddRequestHeader=Gateway-Secret, my-secret-key
           predicates:
             - Path=/patient/**            # Si l'URL de la requête commence par /patient, alors acheminer la requête vers le micro service patient
