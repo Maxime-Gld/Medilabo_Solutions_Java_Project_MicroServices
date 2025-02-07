@@ -7,5 +7,7 @@ spring:
       routes:
         - id: back-service
           uri: http://localhost:8081/   # L'URL du microservice Back patient
+          filters:
+            - HmacValidationFilter
           predicates:
-            - Path=/patient/**            # Si l'URL de la requête commence par /api, alors acheminer la requête vers ce service
+            - Path=/patient/**            # Si l'URL de la requête commence par /patient, alors acheminer la requête vers le micro service patient
