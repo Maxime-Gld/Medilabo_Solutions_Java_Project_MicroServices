@@ -17,10 +17,10 @@ FROM openjdk:21-jdk
 WORKDIR /app
 
 # Copier uniquement le JAR généré de l’étape précédente
-COPY --from=build /app/target/gateway.jar app.jar
+COPY --from=build /app/target/BackendPatient.jar app.jar
 
 # Exposer le port sur lequel l'application écoute
-EXPOSE 8881
+EXPOSE 8081
 
 # Définir la commande pour exécuter l'application
 CMD ["java", "-jar", "app.jar"]

@@ -9,6 +9,11 @@ services:
       MYSQL_DATABASE: mydatabase
       MYSQL_USER: admin
       MYSQL_PASSWORD: adminpassword
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 3s
+      retries: 10
+      timeout: 3s
     ports:
       - "3306:3306"
     volumes:
@@ -41,6 +46,9 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       - mongo_data:/data/db
+      - ./notes/src/main/resources/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - mongo-net
 
   # mongoExpress
   mongo-express:
@@ -55,24 +63,60 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
     depends_on:
       - mongo
+    networks:
+      - mongo-net
 
-  # Microservice Back
-  # back:
-  #   build:
-  #     context: ./back  # Chemin vers le dossier "back"
-  #     dockerfile: Dockerfile
-  #   container_name: back_service
-  #   ports:
-  #     - "8081:8081"
-  #   expose:
-  #     - "8081"
-  #   environment:
-  #     SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mydatabase
-  #     SPRING_DATASOURCE_USERNAME: admin
-  #     SPRING_DATASOURCE_PASSWORD: adminpassword
-  #   depends_on:
-  #     - db # Le microservice Back dépend du service MySQL et sera éxécuté après le service MySQL
+  # Microservice Backend Patient
+  back-patient:
+    build:
+      context: ./patient  # Chemin vers le dossier "back"
+      dockerfile: Dockerfile
+    container_name: patientService
+    ports:
+      - "8081:8081"
+    expose:
+      - "8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mydatabase
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: adminpassword
+    depends_on:
+      db: # Le microservice Back dépend du service MySQL et sera éxécuté après le service MySQL
+        condition: service_healthy
+  # Microservice Gateway
+  gateway:
+    build:
+      context: ./gateway  # Chemin vers le dossier "gateway"
+      dockerfile: Dockerfile
+    container_name: gatewayService
+    ports:
+      - "8881:8881"
+    expose:
+      - "8881"
+    environment:
+      URL_BACK_PATIENT: http://patientService:8081
+    depends_on:
+      - back-patient
+
+  # Microservice Frontend
+  front:
+    build:
+      context: ./frontend  # Chemin vers le dossier "front"
+      dockerfile: Dockerfile
+    container_name: frontService
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    environment:
+      URL_GATEWAY: http://gatewayService:8881
+    depends_on:
+      - gateway
 
 volumes:
   db_data:
   mongo_data:
+
+networks:
+  mongo-net:
+    driver: bridge
