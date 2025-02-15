@@ -25,7 +25,7 @@ import com.medilabo.solutions.frontend.dto.PatientDTO;
 public class PatientController {
 
     private Hmac hmacService = new Hmac();
-    private String urlBackend = "http://localhost:8881/patient/";
+    private static final String GATEWAY_URL = "http://gatewayService:8881/patient/";
     private static final String SECRET_KEY = "medilabo";
 
     @GetMapping("/all")
@@ -40,7 +40,7 @@ public class PatientController {
         // patients
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(urlBackend + "all"))
+                .uri(URI.create(GATEWAY_URL + "all"))
                 .header("hmac", hmac)
                 .header("message", randomString)
                 .GET()
@@ -71,7 +71,7 @@ public class PatientController {
         // Effectuer une requete httClient PUT vers l'API pour obtenir un patient
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(urlBackend + id))
+                .uri(URI.create(GATEWAY_URL + id))
                 .header("hmac", hmac)
                 .header("message", randomString)
                 .GET()
@@ -96,7 +96,7 @@ public class PatientController {
         // Effectuer une requete httpCient DELETE vers l'API pour supprimer un patient
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(urlBackend + "delete/" + id))
+                .uri(URI.create(GATEWAY_URL + "delete/" + id))
                 .header("hmac", hmac)
                 .header("message", randomString)
                 .DELETE()
@@ -122,7 +122,7 @@ public class PatientController {
         System.out.println("patient: " + patient);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(urlBackend + "add"))
+                .uri(URI.create(GATEWAY_URL + "add"))
                 .header("Content-Type", "application/json")
                 .header("hmac", hmac)
                 .header("message", randomString)
@@ -145,7 +145,7 @@ public class PatientController {
         String json = objectMapper.writeValueAsString(patient);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(urlBackend + "update/" + id))
+                .uri(URI.create(GATEWAY_URL + "update/" + id))
                 .header("Content-Type", "application/json")
                 .header("hmac", hmac)
                 .header("message", randomString)
