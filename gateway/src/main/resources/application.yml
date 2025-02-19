@@ -12,3 +12,10 @@ spring:
             - AddRequestHeader=Gateway-Secret, my-secret-key
           predicates:
             - Path=/patient/**            # Si l'URL de la requête commence par /patient, alors acheminer la requête vers le micro service patient
+        - id: notes-service
+          uri: http://notesService:8082/  # L'URL du microservice Back notes
+          filters:
+            - HmacValidationFilter
+            - AddRequestHeader=Gateway-Secret, my-secret-key
+          predicates:
+            - Path=/notes/**               # Si l'URL de la requête commence par /notes, alors acheminer la requête vers le micro service notes
