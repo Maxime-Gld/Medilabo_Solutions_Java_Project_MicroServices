@@ -46,7 +46,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       - mongo_data:/data/db
-      - ./notes/src/main/resources/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./notes/src/main/resources/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - mongo-net
 
