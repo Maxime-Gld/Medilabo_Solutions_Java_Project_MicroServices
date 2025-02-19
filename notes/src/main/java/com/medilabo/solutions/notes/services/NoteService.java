@@ -2,9 +2,12 @@ package com.medilabo.solutions.notes.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.medilabo.solutions.notes.entities.NoteEntity;
 import com.medilabo.solutions.notes.repositories.NoteRepository;
 
+@Service
 public class NoteService {
     private final NoteRepository noteRepository;
     
