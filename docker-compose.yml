@@ -19,6 +19,8 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./patient/src/main/resources/sql/initPatients.sql:/docker-entrypoint-initdb.d/data.sql
+    networks:
+      - mysql-net
 
   # phpMyAdmin
   phpmyadmin:
@@ -33,6 +35,8 @@ services:
       PMA_PASSWORD: adminpassword 
     depends_on:
       - db  # phpMyAdmin dépend du service MySQL et sera éxécuté après le service MySQL
+    networks:
+      - mysql-net
 
   # mongoDb
   mongo:
@@ -44,6 +48,12 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    healthcheck:
+      test: ["CMD", "mongosh", "-u", "root", "-p", "example", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     volumes:
       - mongo_data:/data/db
       - ./notes/src/main/resources/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
@@ -83,6 +93,29 @@ services:
     depends_on:
       db: # Le microservice Back dépend du service MySQL et sera éxécuté après le service MySQL
         condition: service_healthy
+    networks:
+      - mysql-net
+
+  # Microservice Backend Notes
+  back-notes:
+    build:
+      context: ./notes  # Chemin vers le dossier "notes"
+      dockerfile: Dockerfile
+    container_name: notesService
+    ports:
+      - "8082:8082"
+    expose:
+      - "8082"
+    environment:
+      SPRING_DATASOURCE_URL: mongodb://mongo:27017
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: example
+    depends_on:
+      mongo: # Le microservice Back-notes dépend du service mongo et sera éxécuté après le service mongo
+        condition: service_healthy
+    networks:
+      - mongo-net
+
   # Microservice Gateway
   gateway:
     build:
@@ -97,6 +130,11 @@ services:
       URL_BACK_PATIENT: http://patientService:8081
     depends_on:
       - back-patient
+      - back-notes
+    networks:
+      - app-net
+      - mysql-net
+      - mongo-net
 
   # Microservice Frontend
   front:
@@ -112,6 +150,8 @@ services:
       URL_GATEWAY: http://gatewayService:8881
     depends_on:
       - gateway
+    networks:
+      - app-net
 
 volumes:
   db_data:
@@ -119,4 +159,8 @@ volumes:
 
 networks:
   mongo-net:
+    driver: bridge
+  mysql-net:
+    driver: bridge
+  app-net:
     driver: bridge
