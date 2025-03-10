@@ -2,8 +2,11 @@ package com.medilabo.solutions.notes.controllers;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,18 +22,25 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<NoteEntity> getAllNotes() {
         return noteService.getAllNotes();
     }
     
-    @GetMapping("/patientId/{patId}")
+    @GetMapping("/{patId}")
     public List<NoteEntity> getNotesByPatId(@PathVariable int patId) {
+        System.out.println("patId: " + patId);
         return noteService.getNotesByPatId(patId);
     }
-    
-    @GetMapping("/patient/{patient}")
-    public List<NoteEntity> getNotesByPatient(@PathVariable String patient) {
-        return noteService.getNotesByPatient(patient);
+
+    @PostMapping("/add")
+    public void addNote(@RequestBody NoteEntity note) {
+        System.out.println("note: " + note);
+        noteService.addNote(note);
+    }
+
+    @DeleteMapping("/{patId}")
+    public void deleteNoteByPatId(@PathVariable int patId) {
+        noteService.deleteNoteByPatId(patId); 
     }
 }
