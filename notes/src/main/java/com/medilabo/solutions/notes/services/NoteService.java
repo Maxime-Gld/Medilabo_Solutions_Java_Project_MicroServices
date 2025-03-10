@@ -26,4 +26,12 @@ public class NoteService {
     public List<NoteEntity> getNotesByPatient(String patient) {
         return noteRepository.findByPatient(patient);
     }
+
+    public void addNote(NoteEntity note) {
+        noteRepository.save(note);
+    }
+
+    public void deleteNoteByPatId(int patId) {
+        noteRepository.deleteByPatId(patId);
+    }
 }
