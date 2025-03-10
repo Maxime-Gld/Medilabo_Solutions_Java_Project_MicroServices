@@ -25,7 +25,7 @@ import com.medilabo.solutions.frontend.dto.PatientDTO;
 public class PatientController {
 
     private Hmac hmacService = new Hmac();
-    private static final String GATEWAY_URL = "http://gatewayService:8881/patient/";
+    private static final String GATEWAY_URL = "http://gatewayService:8881/";
     private static final String SECRET_KEY = "medilabo";
 
     @GetMapping("/all")
@@ -40,7 +40,7 @@ public class PatientController {
         // patients
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(GATEWAY_URL + "all"))
+                .uri(URI.create(GATEWAY_URL + "patient/all"))
                 .header("hmac", hmac)
                 .header("message", randomString)
                 .GET()
@@ -71,7 +71,7 @@ public class PatientController {
         // Effectuer une requete httClient PUT vers l'API pour obtenir un patient
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(GATEWAY_URL + id))
+                .uri(URI.create(GATEWAY_URL + "patient/" +id))
                 .header("hmac", hmac)
                 .header("message", randomString)
                 .GET()
@@ -96,16 +96,29 @@ public class PatientController {
         // Effectuer une requete httpCient DELETE vers l'API pour supprimer un patient
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(GATEWAY_URL + "delete/" + id))
+                .uri(URI.create(GATEWAY_URL + "patient/" + id))
                 .header("hmac", hmac)
                 .header("message", randomString)
                 .DELETE()
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Statut : " + response.statusCode());
-        System.out.println("Corps : " + response.body());
 
+        if (response.statusCode() == 200) {
+            HttpRequest request2 = HttpRequest.newBuilder()
+                    .uri(URI.create(GATEWAY_URL + "notes/"+id))
+                    .header("hmac", hmac)
+                    .header("message", randomString)
+                    .DELETE()
+                    .build();
+
+            HttpResponse<String> response2 = httpClient.send(request2, HttpResponse.BodyHandlers.ofString());
+
+            if (response2.statusCode() == 200) {
+                return "redirect:/patient/all";
+            }
+        }
+        /* ajouter une gestion d'erreur plus tard */
         return "redirect:/patient/all";
     }
 
@@ -122,7 +135,7 @@ public class PatientController {
         System.out.println("patient: " + patient);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(GATEWAY_URL + "add"))
+                .uri(URI.create(GATEWAY_URL + "patient/add"))
                 .header("Content-Type", "application/json")
                 .header("hmac", hmac)
                 .header("message", randomString)
