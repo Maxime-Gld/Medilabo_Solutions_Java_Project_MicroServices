@@ -93,7 +93,7 @@ public class PatientController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deletePatient(@PathVariable Integer id) {
         Optional<PatientEntity> patient = patientService.getPatientById(id);
         if (patient.isPresent()) {
