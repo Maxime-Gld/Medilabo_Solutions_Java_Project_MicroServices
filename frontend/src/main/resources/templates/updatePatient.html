@@ -24,6 +24,11 @@
         <input type="hidden" name="id" th:value="${patient.id}" />
         <button type="submit" style="background-color: red; color: white;">Supprimer</button>
     </form>
+
+    <button th:onclick="location.href='/patient/all'">Retour à la liste des patients</button>
+
+    <button th:attr="onclick='location.href=\'/notes/' + ${patient.id} + '\''">Voir les notes</button>
+
 </body>
 
 

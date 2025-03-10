@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Notes du patient</title>
+</head>
+<body>
+    <h1>Notes de <span th:text="${(listNote != null and not #lists.isEmpty(listNote)) ? listNote[0].patient : note.patient}"></span></h1>
+
+    <!-- Vérification si la liste des notes est vide -->
+    <div th:if="${listNote != null and not #lists.isEmpty(listNote)}">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="note : ${listNote}">
+                    <td th:text="${note.note}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Message si aucune note n'est disponible -->
+    <p th:if="${listNote == null or #lists.isEmpty(listNote)}">Aucune note disponible pour ce patient.</p>
+
+    <!-- Formulaire pour ajouter une nouvelle note -->
+    <form th:action="@{/notes/add}" method="post">
+        <!-- Champ caché pour l'ID du patient (si la liste est vide, on met un ID par défaut) -->
+        <input type="hidden" name="patId" th:value="${(listNote != null and not #lists.isEmpty(listNote)) ? listNote[0].patId : note.patId }">
+        <input type="hidden" name="patient" th:value="${(listNote != null and not #lists.isEmpty(listNote)) ? listNote[0].patient : note.patient }">
+
+        <label for="note">Nouvelle note :</label>
+        <input type="text" id="note" name="note" required><br>
+
+        <button type="submit">Ajouter</button>
+    </form>
+
+    <button onclick="location.href='/patient/all'">Retour à la liste des patients</button>
+</body>
+</html>
