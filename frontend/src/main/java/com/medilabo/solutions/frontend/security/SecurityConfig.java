@@ -41,7 +41,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/", "/public/**").permitAll() // Pages publiques
-                .anyRequest().authenticated() // Tout le reste nécessite une authentification
+                .anyRequest().hasRole("ADMIN") // Tout le reste nécessite une authentification
             )
             // utiliser le formulaire de connexion de spring
             .formLogin(form -> form
