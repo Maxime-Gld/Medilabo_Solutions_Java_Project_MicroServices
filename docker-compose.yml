@@ -52,11 +52,13 @@ services:
       test: ["CMD", "mongosh", "-u", "root", "-p", "example", "--eval", "db.adminCommand('ping').ok"]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 5
       start_period: 10s
     volumes:
       - mongo_data:/data/db
+      - ./notes/src/main/resources/mongo/mongod.conf:/etc/mongod.conf
       - ./notes/src/main/resources/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    command: ["mongod", "--config", "/etc/mongod.conf"]
     networks:
       - mongo-net
 
@@ -112,6 +114,18 @@ services:
     networks:
       - mongo-net
 
+  # Microservice Backend Risk
+  back-risk:
+    build:
+      context: ./risk  # Chemin vers le dossier "risk"
+      dockerfile: Dockerfile
+    container_name: riskService
+    depends_on:
+      - back-patient
+      - back-notes
+    networks:
+      - risk-net
+
   # Microservice Gateway
   gateway:
     build:
@@ -125,13 +139,16 @@ services:
     environment:
       URL_BACK_PATIENT: http://patientService:8081
       URL_BACK_NOTES: http://notesService:8082
+      URL_BACK_RISK: http://riskService:8083
     depends_on:
       - back-patient
       - back-notes
+      - back-risk
     networks:
       - app-net
       - mysql-net
       - mongo-net
+      - risk-net
 
   # Microservice Frontend
   front:
@@ -160,4 +177,6 @@ networks:
   mysql-net:
     driver: bridge
   app-net:
+    driver: bridge
+  risk-net:
     driver: bridge
