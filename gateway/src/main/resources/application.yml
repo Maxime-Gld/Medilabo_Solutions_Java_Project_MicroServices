@@ -19,3 +19,10 @@ spring:
             - AddRequestHeader=Gateway-Secret, my-secret-key
           predicates:
             - Path=/notes/**               # Si l'URL de la requête commence par /notes, alors acheminer la requête vers le micro service notes
+        - id: risk-service
+          uri: http://riskService:8083/  # L'URL du microservice Back risk
+          filters:
+            - HmacValidationFilter
+            - AddRequestHeader=Gateway-Secret, my-secret-key
+          predicates:
+            - Path=/risk/**                # Si l'URL de la requête commence par /risk, alors acheminer la requête vers le micro service risk
