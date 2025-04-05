@@ -2,5 +2,5 @@ spring:
   application:
     name: risk
 
-gateway:
-  url: http://localhost:8881/gateway
+server:
+  port: 8083
