@@ -132,7 +132,6 @@ public class PatientController {
         objectMapper.registerModule(new JavaTimeModule());
         String json = objectMapper.writeValueAsString(patient);
 
-        System.out.println("patient: " + patient);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(GATEWAY_URL + "patient/add"))
