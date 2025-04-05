@@ -38,5 +38,6 @@
     </form>
 
     <button onclick="location.href='/patient/all'">Retour à la liste des patients</button>
+    <button th:attr="onclick='location.href=\'/risk/' + ${(listNote != null and not #lists.isEmpty(listNote)) ? listNote[0].patId : note.patId } + '\''">Voir les risques</button>
 </body>
 </html>
