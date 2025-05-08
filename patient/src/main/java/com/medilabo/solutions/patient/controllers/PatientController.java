@@ -65,7 +65,7 @@ public class PatientController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponseDTO<PatientDTO>> updatePatient(@PathVariable Integer id, @Valid @RequestBody PatientDTO patient,
-            BindingResult result) { 
+            BindingResult result) {
         if (result.hasErrors()) {
             // Si des erreurs existent, retourne les erreurs de validation en réponse
             List<String> errors = result.getAllErrors().stream().map(err -> err.getDefaultMessage()).toList();
