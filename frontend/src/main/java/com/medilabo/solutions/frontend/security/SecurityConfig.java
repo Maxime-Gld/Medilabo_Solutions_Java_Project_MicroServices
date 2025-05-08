@@ -40,7 +40,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/", "/public/**").permitAll() // Pages publiques
+                .requestMatchers("/login", "/", "/public/**", "/css/**", "/js/**").permitAll() // Pages publiques
                 .anyRequest().hasRole("ADMIN") // Tout le reste nécessite une authentification
             )
             // utiliser le formulaire de connexion de spring
@@ -51,6 +51,8 @@ public class SecurityConfig {
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
                 .permitAll()
             );
 
