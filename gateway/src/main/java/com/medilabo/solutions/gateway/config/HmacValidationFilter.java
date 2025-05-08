@@ -52,7 +52,6 @@ public class HmacValidationFilter extends AbstractGatewayFilterFactory<Object> {
 
     // réaliser un hmac sha256
     private String generateHmac(String message, String key) {
-        System.out.println("message: " + message);
         try {
             Mac sha256Hmac = Mac.getInstance("HmacSHA256");
             SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256");

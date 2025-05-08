@@ -33,8 +33,6 @@ public class PatientController {
         // générer un hmac pour communiquer avec l'API
         String randomString = hmacService.generateRandomString();
         String hmac = hmacService.generateHmac(randomString, SECRET_KEY);
-        System.out.println("randomString: " + randomString);
-        System.out.println("hmac: " + hmac);
 
         // Effectuer une requete HttpClient GET vers l'API pour obtenir la liste des
         // patients
@@ -119,7 +117,7 @@ public class PatientController {
             }
         }
         /* ajouter une gestion d'erreur plus tard */
-        return "redirect:/patient/all";
+        return "redirect:/error/500";
     }
 
     @PostMapping("/add")
@@ -143,7 +141,11 @@ public class PatientController {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        return "redirect:/patient/all";
+        if (response.statusCode() == 200) {
+            return "redirect:/patient/all";
+        }
+
+        return "redirect:/error/500";
     }
 
     @PostMapping("/update/{id}")
@@ -157,7 +159,7 @@ public class PatientController {
         String json = objectMapper.writeValueAsString(patient);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(GATEWAY_URL + "update/" + id))
+                .uri(URI.create(GATEWAY_URL + "patient/update/" + id))
                 .header("Content-Type", "application/json")
                 .header("hmac", hmac)
                 .header("message", randomString)
@@ -169,7 +171,7 @@ public class PatientController {
         if (response.statusCode() == 200) {
             return "redirect:/patient/all";
         }
-        return "updatePatient";
+        return "error/500";
     }
 
 }

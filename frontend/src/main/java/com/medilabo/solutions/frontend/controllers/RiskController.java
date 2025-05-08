@@ -44,7 +44,6 @@ public class RiskController {
 
         // la réponse est un enum de risque
         if (response.statusCode() == 200) {
-            System.out.println("response: " + response.body());
 
             try {
                 RiskConstant risk = RiskConstant.valueOf(response.body());

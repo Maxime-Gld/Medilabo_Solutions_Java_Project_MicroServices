@@ -81,12 +81,11 @@ public class NoteController {
             return "addNote";
         }
 
-        return "addNote";
+        return "redirect:/error/500";
     }
 
     @PostMapping("/add")
     public String addPatientNote(Model model, NoteDTO noteDto) throws IOException, InterruptedException {
-        System.out.println("noteDto: " + noteDto);
         String randomString = hmacService.generateRandomString();
         String hmac = hmacService.generateHmac(randomString, SECRET_KEY);
 

@@ -15,11 +15,9 @@ public class PageController {
     public String index(Model model) {
         // Récupérer l'utilisateur authentifié
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("Authentication: " + authentication);
         // Si l'utilisateur est authentifié
         if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {
             User user = (User) authentication.getPrincipal(); // Récupère l'utilisateur de type 'User'
-            System.out.println("user: " + user);
             // Utiliser l'utilisateur pour afficher des informations
             model.addAttribute("username", user.getUsername());
             model.addAttribute("message", "Bonjour, " + user.getUsername() + " ! \n Vous pouvez accéder aux fonctionnalités de l'application.");

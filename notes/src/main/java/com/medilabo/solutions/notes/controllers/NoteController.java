@@ -29,13 +29,11 @@ public class NoteController {
     
     @GetMapping("/{patId}")
     public List<NoteEntity> getNotesByPatId(@PathVariable int patId) {
-        System.out.println("patId: " + patId);
         return noteService.getNotesByPatId(patId);
     }
 
     @PostMapping("/add")
     public void addNote(@RequestBody NoteEntity note) {
-        System.out.println("note: " + note);
         noteService.addNote(note);
     }
 

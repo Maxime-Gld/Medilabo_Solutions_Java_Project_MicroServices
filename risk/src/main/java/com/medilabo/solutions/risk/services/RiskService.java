@@ -44,8 +44,6 @@ public class RiskService {
         PatientDTO patient = patientClient.getPatient(patientId);
         
         List<NoteDTO> notes = noteClient.getNotes(patientId);
-        System.out.println("notes: " + notes);
-        System.out.println("patient: " + patient);
         if (notes == null || notes.isEmpty() || patient == null) {
             return Optional.empty();
         }
