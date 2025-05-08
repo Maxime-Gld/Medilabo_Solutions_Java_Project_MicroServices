@@ -1,35 +1,48 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Modifier un patient</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 </head>
-<body>
-    <h1>Modifier ou spprimer un patient</h1>
-    <form th:action="@{/patient/update/{id}(id=${patient.id})}" method="post">
+
+<body class="container">
+    <h1 class="page-title">Modifier ou supprimer un patient</h1>
+    <form th:action="@{/patient/update/{id}(id=${patient.id})}" method="post" class="form">
         <label for="name">Prénom:</label>
-        <input type="text" id="name" name="name" th:value="${patient.name}" required><br>
+        <input type="text" id="name" name="name" th:value="${patient.name}" required>
+
         <label for="lastname">Nom:</label>
-        <input type="text" id="lastname" name="lastname" th:value="${patient.lastname}" required><br>
+        <input type="text" id="lastname" name="lastname" th:value="${patient.lastname}" required>
+
         <label for="birthdate">Date de Naissance:</label>
-        <input type="date" id="birthdate" name="birthdate" th:value="${patient.birthdate}" required><br>
+        <input type="date" id="birthdate" name="birthdate" th:value="${patient.birthdate}" required>
+
         <label for="gender">Genre:</label>
-        <input type="text" id="gender" name="gender" th:value="${patient.gender}" required><br>
+        <select id="gender" name="gender" required>
+            <option th:value="M" th:selected="${patient.gender == 'M'}">M</option>
+            <option th:value="F" th:selected="${patient.gender == 'F'}">F</option>
+        </select>
+
         <label for="adress">Adresse:</label>
-        <input type="text" id="adress" name="adress" th:value="${patient.adress}"><br>
+        <input type="text" id="adress" name="adress" th:value="${patient.adress}">
+
         <label for="phone">Téléphone:</label>
-        <input type="text" id="phone" name="phone" th:value="${patient.phone}"><br>
-        <button type="submit" value="Modifier">Modifier</button>
+        <input type="text" id="phone" name="phone" th:value="${patient.phone}">
+
+        <button type="submit" class="btn btn-primary">Modifier</button>
     </form>
-    <form th:action="@{/patient/delete/{id}(id=${patient.id})}" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer ce patient ?');">
+
+    <form th:action="@{/patient/delete/{id}(id=${patient.id})}" method="post" class="form"
+        onsubmit="return confirm('Voulez-vous vraiment supprimer ce patient ?');">
         <input type="hidden" name="id" th:value="${patient.id}" />
-        <button type="submit" style="background-color: red; color: white;">Supprimer</button>
+        <button type="submit" class="btn btn-danger">Supprimer</button>
     </form>
-
-    <button th:onclick="location.href='/patient/all'">Retour à la liste des patients</button>
-
-    <button th:attr="onclick='location.href=\'/notes/' + ${patient.id} + '\''">Voir les notes</button>
-
+    <hr>
+    <div class="button-group">
+        <button onclick="location.href='/patient/all'" class="btn btn-secondary">Retour à la liste des patients</button>
+        <button th:attr="onclick='location.href=\'/notes/' + ${patient.id} + '\''" class="btn btn-info">Voir les notes</button>
+    </div>
 </body>
-
 
 </html>

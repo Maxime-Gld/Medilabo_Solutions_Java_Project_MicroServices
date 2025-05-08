@@ -1,25 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>add patient</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 </head>
-<body>
-    <h1>Ajouter un nouveau patient</h1>
-    <form th:action="@{/patient/add}" method="post">
+
+<body class="container">
+    <h1 class="page-title">Ajouter un nouveau patient</h1>
+    <form th:action="@{/patient/add}" method="post" class="form">
         <label for="name">Prénom:</label>
-        <input type="text" id="name" name="name" required><br>
+        <input type="text" id="name" name="name" required>
+
         <label for="lastname">Nom:</label>
-        <input type="text" id="lastname" name="lastname" required><br>
+        <input type="text" id="lastname" name="lastname" required>
+
         <label for="birthdate">Date de Naissance:</label>
-        <input type="date" id="birthdate" name="birthdate" required><br>
+        <input type="date" id="birthdate" name="birthdate" required>
+
         <label for="gender">Genre:</label>
-        <input type="text" id="gender" name="gender" required><br>
+        <select id="gender" name="gender" required>
+            <option th:value="M">M</option>
+            <option th:value="F">F</option>
+        </select>
+
         <label for="adress">Adresse:</label>
-        <input type="text" id="adress" name="adress"><br>
+        <input type="text" id="adress" name="adress">
+
         <label for="phone">Téléphone:</label>
-        <input type="text" id="phone" name="phone"><br>
-        <button type="submit" value="Ajouter">Ajouter</button>
+        <input type="text" id="phone" name="phone">
+
+        <button type="submit" value="Ajouter" class="btn btn-primary">Ajouter</button>
     </form>
 
-    <button th:onclick="location.href='/patient/all'">Retour à la liste des patients</button>
+    <button th:onclick="location.href='/patient/all'" class="btn btn-secondary">Retour à la liste des patients</button>
 </body>

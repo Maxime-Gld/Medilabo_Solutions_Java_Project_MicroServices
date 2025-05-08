@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Liste des Patients</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 </head>
-<body>
-    <h1>Liste des Patients</h1>
-    <table border="1">
+
+<body class="container">
+    <h1 class="page-title">Liste des Patients</h1>
+    <table>
         <thead>
             <tr>
                 <th>ID</th>
@@ -34,8 +37,10 @@
         </tbody>
     </table>
 
-    <button th:onclick="location.href='/add'">Ajouter un patient</button>
-
-    <button th:onclick="location.href='/'">Retour à la page d'accueil</button>
+    <div class="button-group">
+        <button th:onclick="location.href='/add'" class="btn btn-primary">Ajouter un patient</button>
+        <button th:onclick="location.href='/'" class="btn btn-secondary">Retour à la page d'accueil</button>
+    </div>
 </body>
+
 </html>

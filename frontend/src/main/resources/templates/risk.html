@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>add patient</title>
+    <title>Analyse des risques</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 </head>
-<body>
-    <h1 th:text="${risk}">Titre par défaut</h1>
+
+<body class="container">
+    <h1 class="page-title" th:text="${risk}">Titre par défaut</h1>
 
     <p th:text="${message}">Message par défaut</p>
 
-    <button th:onclick="location.href='/patient/all'">Retour à la liste des patients</button>
+    <div class="button-group">
+        <button th:onclick="location.href='/patient/all'" class="btn">Retour à la liste des patients</button>
+    </div>
 </body>
+
+</html>
