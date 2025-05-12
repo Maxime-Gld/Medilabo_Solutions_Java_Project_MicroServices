@@ -47,3 +47,19 @@ db.notes.insertMany([
         "note": "Taille, Poids, Cholestérol, Vertige et Réaction."
     }
 ]);
+
+// ➕ Création de la collection patients à partir de notes
+db.notes.aggregate([
+    { $group: { _id: "$patId", name: { $first: "$patient" } } },
+    { $project: { _id: 0, patId: "$_id", name: 1 } },
+    { $out: "patients" }
+]);
+
+// 🧹 Nettoyage du champ patient dans notes
+db.notes.updateMany({}, { $unset: { patient: "" } });
+
+// 🕓 Ajout d'une date de création si absente
+db.notes.updateMany(
+    { createdAt: { $exists: false } },
+    { $set: { createdAt: new Date() } }
+);
