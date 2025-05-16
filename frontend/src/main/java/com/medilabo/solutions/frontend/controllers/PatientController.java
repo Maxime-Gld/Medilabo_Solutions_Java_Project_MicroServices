@@ -48,7 +48,7 @@ public class PatientController {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         // Vérifier si la requête est réussie
-        if (response.statusCode() == 200) {
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
             // Convertir la réponse JSON en liste de PatientDTO
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
@@ -77,7 +77,7 @@ public class PatientController {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             PatientDTO patient = objectMapper.readValue(response.body(), PatientDTO.class);
@@ -102,7 +102,7 @@ public class PatientController {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
             HttpRequest request2 = HttpRequest.newBuilder()
                     .uri(URI.create(GATEWAY_URL + "notes/"+id))
                     .header("hmac", hmac)
@@ -112,11 +112,11 @@ public class PatientController {
 
             HttpResponse<String> response2 = httpClient.send(request2, HttpResponse.BodyHandlers.ofString());
 
-            if (response2.statusCode() == 200) {
+            if (response2.statusCode() >= 200 && response2.statusCode() <= 299) {
                 return "redirect:/patient/all";
             }
         }
-        /* ajouter une gestion d'erreur plus tard */
+
         return "redirect:/error/500";
     }
 
@@ -140,8 +140,9 @@ public class PatientController {
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
             return "redirect:/patient/all";
         }
 
@@ -168,7 +169,7 @@ public class PatientController {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
             return "redirect:/patient/all";
         }
         return "error/500";

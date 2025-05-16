@@ -48,7 +48,7 @@ public class NoteController {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             List<NoteDTO> noteList = objectMapper.readValue(response.body(), new TypeReference<List<NoteDTO>>() {
@@ -67,7 +67,7 @@ public class NoteController {
                 HttpResponse<String> responsePatient = httpClient.send(requestPatient,
                         HttpResponse.BodyHandlers.ofString());
 
-                if (responsePatient.statusCode() == 200) {
+                if (responsePatient.statusCode() >= 200 && responsePatient.statusCode() <= 299) {
                     PatientDTO patient = objectMapper.readValue(responsePatient.body(), PatientDTO.class);
                     NoteDTO note = new NoteDTO();
                     note.setPatId(id);
@@ -104,7 +104,7 @@ public class NoteController {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
             return "redirect:/notes/" + noteDto.getPatId();
         }
         model.addAttribute("error", "Une erreur s'est produite lors de l'ajout de la note.");

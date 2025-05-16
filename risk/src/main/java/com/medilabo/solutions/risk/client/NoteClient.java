@@ -42,7 +42,7 @@ public class NoteClient {
                 .build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             return objectMapper.readValue(response.body(), new TypeReference<List<NoteDTO>>() {});

@@ -43,7 +43,7 @@ public class RiskController {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         // la réponse est un enum de risque
-        if (response.statusCode() == 200) {
+        if (response.statusCode() >= 200 && response.statusCode() <= 299) {
 
             try {
                 RiskConstant risk = RiskConstant.valueOf(response.body());
