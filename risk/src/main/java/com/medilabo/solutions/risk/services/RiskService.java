@@ -45,6 +45,10 @@ public class RiskService {
         
         List<NoteDTO> notes = noteClient.getNotes(patientId);
         if (notes == null || notes.isEmpty() || patient == null) {
+            // pas de notes = aucun risque
+            if (notes == null || notes.isEmpty()) {
+                return Optional.of(RiskConstant.NONE);
+            }
             return Optional.empty();
         }
 
