@@ -8,7 +8,7 @@
 
 <body class="container">
     <h1 class="page-title">Notes de <span
-            th:text="${(listNote != null and not #lists.isEmpty(listNote)) ? listNote[0].patient : note.patient}"></span>
+            th:text="${(listNote != null and not #lists.isEmpty(listNote)) ? listNote[0].patientName : note.patientName}"></span>
     </h1>
 
     <div th:if="${listNote != null and not #lists.isEmpty(listNote)}">
@@ -31,8 +31,8 @@
     <form th:action="@{/notes/add}" method="post" class="form">
         <input type="hidden" name="patId"
             th:value="${(listNote != null and not #lists.isEmpty(listNote)) ? listNote[0].patId : note.patId }">
-        <input type="hidden" name="patient"
-            th:value="${(listNote != null and not #lists.isEmpty(listNote)) ? listNote[0].patient : note.patient }">
+        <input type="hidden" name="patientName"
+            th:value="${(listNote != null and not #lists.isEmpty(listNote)) ? listNote[0].patientName : note.patientName }">
 
         <label for="note">Nouvelle note :</label>
         <input type="text" id="note" name="note" required>

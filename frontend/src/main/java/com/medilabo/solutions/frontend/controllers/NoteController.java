@@ -71,7 +71,7 @@ public class NoteController {
                     PatientDTO patient = objectMapper.readValue(responsePatient.body(), PatientDTO.class);
                     NoteDTO note = new NoteDTO();
                     note.setPatId(id);
-                    note.setPatient(patient.getLastname());
+                    note.setPatientName(patient.getLastname());
                     model.addAttribute("note", note);
                 }
                 return "addNote";
