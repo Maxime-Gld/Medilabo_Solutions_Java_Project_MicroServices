@@ -18,7 +18,7 @@ import com.medilabo.solutions.notes.services.NoteService;
 @RequestMapping("/notes")
 public class NoteController {
     private final NoteService noteService;
-    
+
     public NoteController(NoteService noteService) {
         this.noteService = noteService;
     }
@@ -27,10 +27,10 @@ public class NoteController {
     public List<NoteEntity> getAllNotes() {
         return noteService.getAllNotes();
     }
-    
+
     @GetMapping("/{patId}")
-    public List<NoteWithPatientNameDTO > getNotesByPatId(@PathVariable int patId) {
-        return noteService.getNotesByPatId(patId);
+    public List<NoteWithPatientNameDTO> getNotesByPatId(@PathVariable int patId) {
+        return noteService.findByPatId(patId);
     }
 
     @PostMapping("/add")
@@ -40,6 +40,6 @@ public class NoteController {
 
     @DeleteMapping("/{patId}")
     public void deleteNoteByPatId(@PathVariable int patId) {
-        noteService.deleteNoteByPatId(patId); 
+        noteService.deleteNoteByPatId(patId);
     }
 }
