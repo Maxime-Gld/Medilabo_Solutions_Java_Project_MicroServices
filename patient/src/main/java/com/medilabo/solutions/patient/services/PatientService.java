@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.medilabo.solutions.patient.dto.PatientDTO;
+import com.medilabo.solutions.patient.dto.RiskPatientDTO;
 import com.medilabo.solutions.patient.entities.PatientEntity;
 
 public interface PatientService {
@@ -16,15 +17,11 @@ public interface PatientService {
     //Read
     Optional<PatientEntity> getPatientById(Integer id);
     
-    Optional<PatientEntity> getPatientByNameAndLastname(String name, String lastname);
-    
     Optional<PatientDTO> getPatientDTOById(Integer id);
-    
-    Optional<PatientDTO> getPatientDTOByNameAndLastname(String name, String lastname);
+
+    Optional<RiskPatientDTO> getRiskPatientDTOById(Integer id);
     
     //Read all
-    List<PatientEntity> getAllPatients();
-
     List<PatientDTO> getAllPatientDTOs();
 
     //Update
