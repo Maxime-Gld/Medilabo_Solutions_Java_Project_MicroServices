@@ -18,7 +18,7 @@ public class PatientClient {
 
     private static final String SECRET_KEY = "medilabo";
     private final String GATEWAY_URL = "http://gatewayService:8881/";
-    private final String BACKEND_PATIENT_URL = GATEWAY_URL + "patient/";
+    private final String BACKEND_PATIENT_URL = GATEWAY_URL + "patient/risk/";
     private final HttpClient httpClient;
     private final Hmac hmacService = new Hmac();
 

@@ -20,7 +20,7 @@ public class NoteClient {
     
     private static final String SECRET_KEY = "medilabo";
     private final String GATEWAY_URL = "http://gatewayService:8881/";
-    private final String BACKEND_NOTE_URL = GATEWAY_URL + "notes/";
+    private final String BACKEND_NOTE_URL = GATEWAY_URL + "notes/risk/";
     private final HttpClient httpClient;
     private final Hmac hmacService = new Hmac();
 
