@@ -4,62 +4,63 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.medilabo.solutions.notes.dto.NoteDTO;
 import com.medilabo.solutions.notes.dto.NoteWithPatientNameDTO;
 import com.medilabo.solutions.notes.entities.NoteEntity;
-import com.medilabo.solutions.notes.entities.PatientEntity;
 import com.medilabo.solutions.notes.repositories.NoteRepository;
-import com.medilabo.solutions.notes.repositories.PatientRepository;
+import com.mongodb.DuplicateKeyException;
 
 @Service
 public class NoteService {
     private final NoteRepository noteRepository;
-    private final PatientRepository patientRepository;
 
-    public NoteService(NoteRepository noteRepository, PatientRepository patientRepository) {
+    public NoteService(NoteRepository noteRepository) {
         this.noteRepository = noteRepository;
-        this.patientRepository = patientRepository;
     }
 
+    // Récupérer toutes les notes (attention au volume) => pagination pour green code ?
     public List<NoteEntity> getAllNotes() {
         return noteRepository.findAll();
     }
 
-    public List<NoteWithPatientNameDTO> getNotesByPatId(int patId) {
-        List<NoteEntity> notes = noteRepository.findByPatId(patId);
-        PatientEntity patient = patientRepository.findByPatId(patId);
-        return notes.stream()
+    // Récupérer les notes d'un patient avec patientName déjà inclus
+    public List<NoteWithPatientNameDTO> findByPatId(int patId) {
+        return noteRepository.findByPatId(patId)
+                .stream()
                 .map(note -> new NoteWithPatientNameDTO(
                         note.getPatId(),
-                        patient.getName(),
+                        note.getPatientName(),
                         note.getNote()))
                 .toList();
-
     }
 
-    public void addNote(NoteWithPatientNameDTO note) {
-        // Vérifier si le patient existe déjà
-        if (!patientRepository.existsByPatId(note.getPatId())) {
-            // Créer le patient si non existant
-            PatientEntity newPatient = new PatientEntity();
-            newPatient.setPatId(note.getPatId());
-            newPatient.setName(note.getPatient());
-            patientRepository.save(newPatient);
-        }
-
-        // Vérifier si la même note existe déjà pour ce patient (basée sur patId et
-        // contenu de note)
-        boolean noteExists = noteRepository.existsByPatIdAndNote(note.getPatId(), note.getNote());
-        if (noteExists) {
-            throw new IllegalArgumentException("Cette note a déjà été ajoutée pour ce patient.");
-        }
-
-        // Ajouter la note
-        NoteEntity newNote = new NoteEntity();
-        newNote.setPatId(note.getPatId());
-        newNote.setNote(note.getNote());
-        noteRepository.save(newNote);
+    // Récupérer uniquement les notes sans le nom du patient (pour analyse de risque)
+    public List<NoteDTO> getNotesOnlyByPatId(int patId) {
+        return noteRepository.findNotesByPatId(patId)
+                .stream()
+                .map(proj -> new NoteDTO(
+                        proj.getPatId(),
+                        proj.getNote()))
+                .toList();
     }
 
+    // Ajouter une nouvelle note
+    public void addNote(NoteWithPatientNameDTO noteDto) {
+        try {
+            NoteEntity newNote = new NoteEntity();
+            newNote.setPatId(noteDto.getPatId());
+            newNote.setPatientName(noteDto.getPatientName());
+            newNote.setNote(noteDto.getNote());
+            noteRepository.save(newNote);
+        } catch (DuplicateKeyException e) {
+            // MongoDB a détecté un doublon automatiquement grâce à l'index unique
+            throw new IllegalArgumentException(
+                "Cette note a déjà été ajoutée pour ce patient."
+            );
+        }
+    }
+
+    // Supprimer toutes les notes d'un patient
     public void deleteNoteByPatId(int patId) {
         noteRepository.deleteByPatId(patId);
     }
