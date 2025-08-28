@@ -59,11 +59,8 @@ class RiskServiceTest {
                 .filter(p -> (int) p.get("id") == id)
                 .findFirst()
                 .map(patient -> new PatientDTO(id,
-                        (String) patient.get("name"),
-                        (String) patient.get("lastname"),
                         LocalDate.parse((String) patient.get("birthdate")),
-                        (String) patient.get("gender"),
-                        null, null))
+                        (String) patient.get("gender")))
                 .orElseThrow(() -> new IllegalArgumentException("Patient avec ID " + id + " non trouvé"));
     }
 
@@ -77,9 +74,7 @@ class RiskServiceTest {
                 .filter(note -> (int) note.get("patId") == patientId) // Filtrage par patientId
                 .map(note -> // Pour chaque entrée, nous allons créer une NoteDTO
                 new NoteDTO(
-                        (String) note.get("Id"), // Récupérer l'Id
                         (int) note.get("patId"), // Récupérer patId
-                        (String) note.get("patient"), // Récupérer le nom du patient
                         (String) note.get("note") // Récupérer la note
                 ))
                 .collect(Collectors.toList()); // Collecter toutes les NoteDTO dans une liste

@@ -20,19 +20,18 @@ public class RiskService {
     private PatientClient patientClient;
     private NoteClient noteClient;
     private List<String> terminologie = List.of(
-        "Hémoglobine A1C",
-        "Microalbumine",
-        "Taille",
-        "Poids",
-        "Fumeur",
-        "Fumeuse",
-        "Anormal",
-        "Cholestérol",
-        "Vertiges",
-        "Rechute",
-        "Réaction",
-        "Anticorps"
-);
+            "Hémoglobine A1C",
+            "Microalbumine",
+            "Taille",
+            "Poids",
+            "Fumeur",
+            "Fumeuse",
+            "Anormal",
+            "Cholestérol",
+            "Vertiges",
+            "Rechute",
+            "Réaction",
+            "Anticorps");
 
     @Autowired
     public RiskService(PatientClient patientClient, NoteClient noteClient) {
@@ -42,7 +41,7 @@ public class RiskService {
 
     public Optional<RiskConstant> evaluateRisk(int patientId) throws Exception {
         PatientDTO patient = patientClient.getPatient(patientId);
-        
+
         List<NoteDTO> notes = noteClient.getNotes(patientId);
         if (notes == null || notes.isEmpty() || patient == null) {
             // pas de notes = aucun risque
@@ -68,10 +67,6 @@ public class RiskService {
             return RiskConstant.NONE;
         }
         // return RiskConstant.NO_CONCLUSION;
-    }
-
-    private boolean isPatientRiskNone(long count) {
-        return count == 0;
     }
 
     /*
@@ -133,11 +128,12 @@ public class RiskService {
 
     private long countDistinctOccurrences(List<String> notes) {
         return notes.stream()
-                .mapToLong(note -> terminologie.stream()  // Pour chaque note, on vérifie chaque terme
-                        .filter(terme -> note.toLowerCase().contains(terme.toLowerCase()))  // Si le terme est dans la note
-                        .distinct()  // On ne compte chaque terme qu'une seule fois par note
-                        .count()  // On compte les termes distincts
+                .mapToLong(note -> terminologie.stream() // Pour chaque note, on vérifie chaque terme
+                        .filter(terme -> note.toLowerCase().contains(terme.toLowerCase())) // Si le terme est dans la
+                                                                                           // note
+                        .distinct() // On ne compte chaque terme qu'une seule fois par note
+                        .count() // On compte les termes distincts
                 )
-                .sum();  // Additionne les occurrences distinctes pour chaque note
+                .sum(); // Additionne les occurrences distinctes pour chaque note
     }
 }
