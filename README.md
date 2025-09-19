@@ -1,3 +1,12 @@
+# Lancer le projet
+
+Pour lancer le le projet :
+- depuis le dossier MedicalSolutions : `docker-compose up --build`
+- ou exécuter le script : `./stack/run.sh`
+
+⚠️ assurer-vous que le script soit exécutable avec cette commande : `chmod +x ./stack/run.sh`
+
+---
 # Qu'est-ce que le Green Code ?
 
 Le **Green Code** (ou "code vert" en français) désigne l’ensemble des pratiques et techniques visant à réduire l’empreinte environnementale du développement logiciel.  
