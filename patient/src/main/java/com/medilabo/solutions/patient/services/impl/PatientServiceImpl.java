@@ -62,7 +62,6 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Optional<RiskPatientDTO> getRiskPatientDTOById(Integer id) {
-        System.out.println("Fetching risk patient data for ID: " + id);
         return patientRepository.findRiskPatientById(id).map(proj -> new RiskPatientDTO(
                 proj.id(),
                 proj.birthdate(),
