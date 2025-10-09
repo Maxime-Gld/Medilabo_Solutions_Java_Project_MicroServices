@@ -7,12 +7,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.medilabo.solutions.notes.dto.projection.NoteProjection;
+import com.medilabo.solutions.notes.dto.projection.NotesWithPatientNameProjection;
 import com.medilabo.solutions.notes.entities.NoteEntity;
 
 @Repository
 public interface NoteRepository extends MongoRepository<NoteEntity, String> {
 
-    List<NoteEntity> findByPatId(int patId);
+    List<NotesWithPatientNameProjection> findByPatId(int patId);
 
     void deleteByPatId(int patId);
 
