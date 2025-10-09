@@ -134,9 +134,9 @@ services:
     expose:
       - "8881"
     environment:
-      URL_BACK_PATIENT: http://patientService:8081
-      URL_BACK_NOTES: http://notesService:8082
-      URL_BACK_RISK: http://riskService:8083
+      URL_BACK_PATIENT: http://back-patient:8081
+      URL_BACK_NOTES: http://back-notes:8082
+      URL_BACK_RISK: http://back-risk:8083
     depends_on:
       - back-patient
       - back-notes
