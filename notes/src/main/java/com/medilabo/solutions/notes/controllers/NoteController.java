@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.medilabo.solutions.notes.dto.NoteWithPatientNameDTO;
+import com.medilabo.solutions.notes.dto.NoteRequestDTO;
+import com.medilabo.solutions.notes.dto.projection.NotesWithPatientNameProjection;
 import com.medilabo.solutions.notes.entities.NoteEntity;
 import com.medilabo.solutions.notes.services.NoteService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/notes")
@@ -29,12 +32,12 @@ public class NoteController {
     }
 
     @GetMapping("/{patId}")
-    public List<NoteWithPatientNameDTO> getNotesByPatId(@PathVariable int patId) {
+    public List<NotesWithPatientNameProjection> getNotesByPatId(@PathVariable int patId) {
         return noteService.findByPatId(patId);
     }
 
     @PostMapping("/add")
-    public void addNote(@RequestBody NoteWithPatientNameDTO note) {
+    public void addNote(@RequestBody @Valid NoteRequestDTO note) {
         noteService.addNote(note);
     }
 
