@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.medilabo.solutions.notes.dto.NoteDTO;
-import com.medilabo.solutions.notes.dto.NoteWithPatientNameDTO;
+import com.medilabo.solutions.notes.dto.NoteRequestDTO;
+import com.medilabo.solutions.notes.dto.projection.NotesWithPatientNameProjection;
 import com.medilabo.solutions.notes.entities.NoteEntity;
 import com.medilabo.solutions.notes.repositories.NoteRepository;
 import com.mongodb.DuplicateKeyException;
@@ -24,14 +25,8 @@ public class NoteService {
     }
 
     // Récupérer les notes d'un patient avec patientName déjà inclus
-    public List<NoteWithPatientNameDTO> findByPatId(int patId) {
-        return noteRepository.findByPatId(patId)
-                .stream()
-                .map(note -> new NoteWithPatientNameDTO(
-                        note.getPatId(),
-                        note.getPatientName(),
-                        note.getNote()))
-                .toList();
+    public List<NotesWithPatientNameProjection> findByPatId(int patId) {
+        return noteRepository.findByPatId(patId);
     }
 
     // Récupérer uniquement les notes sans le nom du patient (pour analyse de risque)
@@ -45,7 +40,7 @@ public class NoteService {
     }
 
     // Ajouter une nouvelle note
-    public void addNote(NoteWithPatientNameDTO noteDto) {
+    public void addNote(NoteRequestDTO noteDto) {
         try {
             NoteEntity newNote = new NoteEntity();
             newNote.setPatId(noteDto.getPatId());
