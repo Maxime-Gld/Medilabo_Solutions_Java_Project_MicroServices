@@ -1,9 +1,10 @@
 package com.medilabo.solutions.notes.entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -14,13 +15,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "notes")
-@CompoundIndex(def = "{'patId': 1, 'note': 1}", unique = true)
+@CompoundIndex(name = "patient_note_unique_index", def = "{'patId': 1, 'note': 1}", unique = true)
 public class NoteEntity {
     
     @Id
     private String id;
+
+    @Indexed
     private int patId;
     private String patientName;
     private String note;
-    private Date createdAt = new Date();
+    private LocalDateTime createdAt = LocalDateTime.now();
 }
