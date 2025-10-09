@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoteWithPatientNameDTO {
+public class NoteRequestDTO {
     private int patId;
     private String patientName;
     private String note;
